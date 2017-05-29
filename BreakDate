@@ -1,0 +1,48 @@
+Function BreakDate(crewBreakDates As Range) As String
+    'Returns the date as a String (mmm-yy) that the crew will break. Will return "N/A"
+    'if missing dates and "ERROR" if cells do not contain either a valid date or "INDEF"
+    '
+    'Written by CW2 Kyle McCain
+    'Date: 27MAY17
+    
+    'Declare function variables
+    Dim earliestBreakDate As Date
+    Dim cmBreakDate As Range
+    
+    'Set initial value of BreakDate to "N/A" and earliestBreakDate to 0
+    BreakDate = "N/A"
+    earliestBreakDate = 0
+
+    'Process all the crew members' break dates in the range input
+    For Each cmBreakDate In crewBreakDates.Cells
+
+        'If cell is blank, exits function and returns "N/A"
+        If IsEmpty(cmBreakDate) Then
+            GoTo Bye
+
+        'Exit current loop if cell contains "INDEF"
+        ElseIf cmBreakDate.Value = "INDEF" Then
+            GoTo NextIteration
+
+        'If cell has valid date and is earlier than current earliestDate, replaces earliestDate
+        ElseIf IsDate(cmBreakDate.Value) Then
+            Dim temp As Date
+            temp = CDate(cmBreakDate.Value)
+            If earliestBreakDate = 0 Or temp < earliestBreakDate Then
+                earliestBreakDate = temp
+            End If
+
+        'If cell contains any other value than listed above, returns error and exits function
+        Else
+            BreakDate = "ERROR"
+            GoTo Bye
+        End If
+
+NextIteration:
+    Next cmBreakDate
+    
+    'Return the earliest date in input range
+    BreakDate = Format(earliestBreakDate, "mmm-yy")
+       
+Bye:
+End Function
