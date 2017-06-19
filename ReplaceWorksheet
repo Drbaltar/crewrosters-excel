@@ -1,0 +1,18 @@
+Sub ReplaceWorksheet()
+    'Replaces the crew roster reference of the currently active worksheet on the "Audit Sheet"
+    'This can be used when you are copying and pasting a sheet sent from a Battery Trainer
+    '
+    'Written by CW2 Kyle McCain
+    'Date: 19JUN17
+    
+        'Declare and initialize name of replacing worksheet
+        Dim replacingWorksheet As String
+        replacingWorksheet = ActiveSheet.Name
+        
+        'Go to "Audit Sheet" and replace the broken reference with the replacing worksheet name
+        Sheets("Audit Sheet").Select
+        Range("A1:O22").Select
+        Selection.Replace What:="#REF", Replacement:="'" & replacingWorksheet & "'", _
+            LookAt:=xlPart, SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:= _
+            False, ReplaceFormat:=False
+End Sub
